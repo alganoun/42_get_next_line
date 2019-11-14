@@ -6,79 +6,54 @@
 /*   By: alganoun <alganoun@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 09:56:09 by hor4tio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 20:32:06 by alganoun    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 12:45:36 by alganoun    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		line_checker(char *str)
+int		check_line(char *buf)
 {
 	int i;
-	int EOL;
 
 	i = 0;
-	EOL = 0;
-	while (str[i] != '\n')
+	while (buf[i])
 	{
-		if (str[i] == '\n')
-			EOL++;
+		if (buf[i] == '\n')
+			return (i);
 		i++;
 	}
-	return (EOL);
+	return (-1);
 }
-											//il y a trois cas de figure a gerer : BUFF_SIZE trop grand, trop petit et de la bonne taille
 
-char 	*line_in_rest(char *rest)
+int		read_file(int fd, char **rest)
 {
-	int		i;
-	char	*newline;
+	int		ret;
+	char	*buf;
 
-	i = 0;
-	while(rest[i])
-	{
-		if ( rest[i] == '\n')
-		{
-			newline = ft_calloc(i + 1, 1);
-			ft_strlcpy(newline, rest, i + 1);
-			return (newline);
-		}
-		i++;
+	if(!(buf = malloc(BUFFER_SIZE + 1)))
+		return (-1);
+	buf[0] = 0;
+	while (check_line(buf) == -1 && (ret = read(fd, buf, BUFFER_SIZE)))
+	{	
+		buf[ret] = '\0';
+		*rest = ft_strjoin(*rest, buf);
 	}
-	return (rest);
+	return (ret);
 }
 
 int		get_next_line(int fd, char **line)
 {
-	int 		ret;
-	int			i;
-	int			j;
-	char 		buf[BUFFER_SIZE];
-	static char *rest;
-	
+	int i;
+	int ret;
+	char *rest;
+
 	i = 0;
-	j = 0;
-	ret = read(fd, buf, BUFFER_SIZE);
-	if (line_checker(rest) > 0)
-	{	
-		*line = line_in_rest(rest);
-		return(1);
-	}
-	else if (line_checker(buf) > 0)
-	{
-		while(buf[i] != '\n')
-		{
-			*line[i] = buf[i];
-			i++;
-		}
-		if (i < BUFFER_SIZE && buf[i] != 0)
-		{
-			rest = ft_calloc(BUFFER_SIZE - i + 1, 1);
-			while(i < BUFFER_SIZE)
-				rest[j++] = buf[i++];
-		}
-		return (1);
-	}
-	return (0);
+	if (!line || read(fd, 0, 0) < 0)
+		return (-1);
+	rest = ft_calloc(1,1);
+	ret = read_file(fd, &rest);
+	*line = rest;
+	return(ret);
 }

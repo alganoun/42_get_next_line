@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 12:05:26 by hor4tio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/12 20:29:28 by alganoun    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/14 12:31:14 by alganoun    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -48,22 +48,25 @@ void		*ft_calloc(size_t count, size_t size)
 	ft_bzero(tab, len);
 	return (tab);
 }
-
-size_t		ft_strlcpy(char *dst, const char *src, size_t size)
+char		*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t i;
+	int		i;
+	int		j;
+	int		maxlen;
+	char	*dst;
 
 	i = 0;
-	if (dst == NULL || src == NULL)
-		return (0);
-	else if (size > 0)
-	{
-		while (src[i] && i < (size - 1))
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
-	}
-	return (ft_strlen(src));
+	j = 0;
+	if (s1 == NULL)
+		return (NULL);
+	maxlen = (int)ft_strlen(s1) + (int)ft_strlen(s2);
+	if (!(dst = (char *)malloc((maxlen + 1) * sizeof(char))))
+		return (NULL);
+	while (j < (int)ft_strlen(s1))
+		dst[i++] = s1[j++];
+	j = 0;
+	while (j < (int)ft_strlen(s2))
+		dst[i++] = s2[j++];
+	dst[i] = '\0';
+	return (dst);
 }
