@@ -6,49 +6,64 @@
 /*   By: alganoun <alganoun@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 12:05:26 by hor4tio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/14 12:31:14 by alganoun    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/21 23:33:46 by alganoun    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	ft_bzero(void *s, size_t n)
+void safe_free(char **tab)
 {
-	size_t			i;
-	unsigned char	*t;
+	if (*tab)
+		free(*tab);
+	*tab = NULL;
+}
 
-	i = 0;
-	t = s;
-	while (i < n)
+t_list	*lstnew(int fd)
+{
+	t_list *list;
+
+	if (!(list = malloc(sizeof(t_list))))
+		return (NULL);
+	list->fd = fd;
+	list->rest = NULL;
+	list->rest2 = NULL;
+	list->next = NULL;
+	return (list);
+}
+
+void	lstadd_back(t_list **alst, int fd)
+{
+	t_list *new;
+	t_list *lst;
+
+	lst = *alst;
+	new = lstnew(fd);
+	lst->next = new;
+	*alst = new;
+}
+
+void	lst_del(t_list **list, t_list **to_delete)
+{
+	t_list	*tmp;
+	t_list	*tmp2;
+
+	if (to_delete)
 	{
-		t[i] = 0;
-		i++;
+		tmp = *list;
+		tmp2 = (*to_delete)->next;
+		while(tmp->next && tmp->next != *to_delete)
+			tmp = tmp->next;
+		tmp->next = tmp2;
+		safe_free(&((*to_delete)->rest));
+		safe_free(&((*to_delete)->rest2));
+		free(*to_delete);
+		*to_delete = NULL;
 	}
 }
 
-int		ft_strlen(const char *str)
-{
-	int count;
-
-	count = 0;
-	while (str[count])
-		count++;
-	return (count);
-}
-
-void		*ft_calloc(size_t count, size_t size)
-{
-	void	*tab;
-	size_t	len;
-
-	len = count * size;
-	if (!(tab = malloc(len)))
-		return (NULL);
-	ft_bzero(tab, len);
-	return (tab);
-}
-char		*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
 	int		i;
 	int		j;
@@ -57,15 +72,19 @@ char		*ft_strjoin(char const *s1, char const *s2)
 
 	i = 0;
 	j = 0;
-	if (s1 == NULL)
-		return (NULL);
-	maxlen = (int)ft_strlen(s1) + (int)ft_strlen(s2);
+	while (s1 && s1[i])
+		i++;
+	while(s2 && s2[j])
+		j++;
+	maxlen = i + j;
+	i = 0;
+	j = 0;
 	if (!(dst = (char *)malloc((maxlen + 1) * sizeof(char))))
 		return (NULL);
-	while (j < (int)ft_strlen(s1))
+	while (s1 && s1[j])
 		dst[i++] = s1[j++];
 	j = 0;
-	while (j < (int)ft_strlen(s2))
+	while (s2 && s2[j])
 		dst[i++] = s2[j++];
 	dst[i] = '\0';
 	return (dst);
