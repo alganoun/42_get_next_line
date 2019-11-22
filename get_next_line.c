@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 09:56:09 by hor4tio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/21 23:33:47 by alganoun    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/22 20:55:27 by alganoun    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -38,12 +38,12 @@ t_list	*fd_check(t_list **list, int fd)
 	if(!(*list))
 		return (*list = lstnew(fd));
 	tmp = *list;
-	while(tmp->fd != fd)
+	while(tmp && tmp->fd != fd)
 	{
-		if((tmp->next = NULL))
+		if(tmp->next == NULL)
 		{
 			lstadd_back(&tmp, fd);
-			return(tmp);
+			return(tmp->next);
 		}
 		tmp = tmp->next;
 	}

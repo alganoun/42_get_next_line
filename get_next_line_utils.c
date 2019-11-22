@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 12:05:26 by hor4tio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/21 23:33:46 by alganoun    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/22 21:12:27 by alganoun    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -41,25 +41,38 @@ void	lstadd_back(t_list **alst, int fd)
 	lst = *alst;
 	new = lstnew(fd);
 	lst->next = new;
-	*alst = new;
 }
 
 void	lst_del(t_list **list, t_list **to_delete)
 {
 	t_list	*tmp;
-	t_list	*tmp2;
 
-	if (to_delete)
+	if (*to_delete)
 	{
 		tmp = *list;
-		tmp2 = (*to_delete)->next;
-		while(tmp->next && tmp->next != *to_delete)
-			tmp = tmp->next;
-		tmp->next = tmp2;
-		safe_free(&((*to_delete)->rest));
-		safe_free(&((*to_delete)->rest2));
-		free(*to_delete);
-		*to_delete = NULL;
+		if ((*list)->next == *to_delete)
+		{
+			(*list)->next = (*to_delete)->next;
+			safe_free(&((*to_delete)->rest));
+			safe_free(&((*to_delete)->rest2));
+			*to_delete = NULL;
+		}
+		else
+		{
+			if (*to_delete == *list)
+				*list = (*to_delete)->next;
+			else 
+			{	
+				while(tmp->next != *to_delete)
+				tmp = tmp->next;
+				tmp->next = (*to_delete)->next;
+			}
+			safe_free(&((*to_delete)->rest));
+			safe_free(&((*to_delete)->rest2));
+			free(*to_delete);
+			*to_delete = NULL;
+			
+		}
 	}
 }
 
