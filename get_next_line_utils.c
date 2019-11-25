@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 12:05:26 by hor4tio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/22 21:12:27 by alganoun    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/25 19:44:06 by alganoun    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -33,15 +33,27 @@ t_list	*lstnew(int fd)
 	return (list);
 }
 
-void	lstadd_back(t_list **alst, int fd)
+t_list	*fd_check(t_list **list, int fd)
 {
-	t_list *new;
-	t_list *lst;
+	t_list	*tmp;
+	t_list	*new;
 
-	lst = *alst;
-	new = lstnew(fd);
-	lst->next = new;
+	if (!(*list))
+		return (*list = lstnew(fd));
+	tmp = *list;
+	while (tmp && tmp->fd != fd)
+	{
+		if (tmp->next == NULL)
+		{
+			new = lstnew(fd);
+			tmp->next = new;
+			return (tmp->next);
+		}
+		tmp = tmp->next;
+	}
+	return (tmp);
 }
+
 
 void	lst_del(t_list **list, t_list **to_delete)
 {
@@ -64,19 +76,18 @@ void	lst_del(t_list **list, t_list **to_delete)
 			else 
 			{	
 				while(tmp->next != *to_delete)
-				tmp = tmp->next;
+					tmp = tmp->next;
 				tmp->next = (*to_delete)->next;
 			}
 			safe_free(&((*to_delete)->rest));
 			safe_free(&((*to_delete)->rest2));
 			free(*to_delete);
 			*to_delete = NULL;
-			
 		}
 	}
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	int		i;
 	int		j;
