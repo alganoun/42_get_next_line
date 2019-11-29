@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 12:43:47 by hor4tio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/27 16:25:49 by alganoun    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/29 19:52:07 by alganoun    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,19 +17,17 @@ int		main()
 {
 	int		ret;
 	int		fd;
-	int 	fd2;
-	int		fd3;
 	char	*line;
-	
+
+	ret = 1;
 	fd = open("Files/file.txt", O_RDONLY);
-	fd2 = open("Files/empty.txt", O_RDONLY);
-	fd3 = open("Files/bible.txt", O_RDONLY);
-	while (get_next_line(fd, &line))
+	while (ret > 0)
 	{
+		ret = get_next_line(fd, &line);
 		printf("%s\n", line);
+		printf("%d\n", ret);
 		free(line);
 	}
-	free(line);
 	ret = get_next_line(fd, &line);
 	printf("%s\n", line);
 	printf("%d", ret);

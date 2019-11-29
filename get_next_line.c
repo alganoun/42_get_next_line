@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 09:56:09 by hor4tio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/25 20:15:14 by alganoun    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/29 20:09:46 by alganoun    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -60,7 +60,8 @@ int		check_rest(char **rest1, char **rest2, char **str, char **line)
 {
 	if (*rest1)
 	{
-		*rest2 = ft_strjoin(*rest1, NULL);
+		if (!(*rest2 = ft_strjoin(*rest1, NULL)))
+			return (-1);
 		if (check_line(*rest2, rest1) != -1)
 		{
 			*line = *rest2;
@@ -87,7 +88,8 @@ int		read_file(int fd, char **str, char **rest)
 		buf[ret] = '\0';
 		i = check_line(buf, rest);
 		tmp = *str;
-		*str = ft_strjoin(*str, buf);
+		if (!(*str = ft_strjoin(*str, buf)))
+			return (-1);
 		safe_free(&tmp);
 	}
 	safe_free(&buf);
@@ -108,6 +110,8 @@ int		get_next_line(int fd, char **line)
 		return (-1);
 	if (check_rest(&(lst->rest), &(lst->rest2), &str, line) == 1)
 		return (1);
+	if (check_rest(&(lst->rest), &(lst->rest2), &str, line) == -1)
+		return (-1);
 	ret = read_file(fd, &str, &(lst->rest));
 	if (lst->rest2)
 	{

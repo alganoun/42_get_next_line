@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 12:05:26 by hor4tio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/26 12:15:39 by alganoun    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/29 20:10:09 by alganoun    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -82,7 +82,6 @@ char	*ft_strjoin(char *s1, char *s2)
 {
 	int		i;
 	int		j;
-	int		maxlen;
 	char	*dst;
 
 	i = 0;
@@ -91,11 +90,10 @@ char	*ft_strjoin(char *s1, char *s2)
 		i++;
 	while (s2 && s2[j])
 		j++;
-	maxlen = i + j;
+	if (!(dst = (char *)malloc((i + j + 1) * sizeof(char))))
+		return (NULL);
 	i = 0;
 	j = 0;
-	if (!(dst = (char *)malloc((maxlen + 1) * sizeof(char))))
-		return (NULL);
 	while (s1 && s1[j])
 		dst[i++] = s1[j++];
 	j = 0;
