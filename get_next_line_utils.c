@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 12:05:26 by hor4tio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/29 20:10:09 by alganoun    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/12/06 18:10:50 by alganoun    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -54,16 +54,17 @@ t_list	*fd_check(t_list **list, int fd)
 	return (tmp);
 }
 
-void	lst_del(t_list **list, t_list **to_delete)
+int		lst_del(int return_value, t_list **list,
+					t_list **to_delete, char **str)
 {
 	t_list	*tmp;
 
-	if (*to_delete)
+	if ((*str) != NULL)
+		safe_free(str);
+	if (*list && *to_delete)
 	{
 		tmp = *list;
-		if ((*list)->next == *to_delete)
-			(*list)->next = (*to_delete)->next;
-		else if (*to_delete == *list)
+		if (*to_delete == *list)
 			*list = (*to_delete)->next;
 		else
 		{
@@ -76,6 +77,7 @@ void	lst_del(t_list **list, t_list **to_delete)
 		free(*to_delete);
 		*to_delete = NULL;
 	}
+	return (return_value);
 }
 
 char	*ft_strjoin(char *s1, char *s2)
@@ -90,7 +92,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		i++;
 	while (s2 && s2[j])
 		j++;
-	if (!(dst = (char *)malloc((i + j + 1) * sizeof(char))))
+	if (!(dst = (char *)malloc(i + j + 1)))
 		return (NULL);
 	i = 0;
 	j = 0;

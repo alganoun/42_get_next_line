@@ -6,7 +6,7 @@
 /*   By: alganoun <alganoun@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/11/11 12:43:47 by hor4tio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/29 19:52:07 by alganoun    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/12/06 16:40:16 by alganoun    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -28,8 +28,5 @@ int		main()
 		printf("%d\n", ret);
 		free(line);
 	}
-	ret = get_next_line(fd, &line);
-	printf("%s\n", line);
-	printf("%d", ret);
 	return (0);
 }
